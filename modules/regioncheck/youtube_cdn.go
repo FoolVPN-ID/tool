@@ -1,4 +1,4 @@
-package library
+package regioncheck
 
 import (
 	"io"
@@ -6,6 +6,9 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func YoutubeCDN(httpClient http.Client) runnerResultStruct {
@@ -24,11 +27,12 @@ func YoutubeCDN(httpClient http.Client) runnerResultStruct {
 		io.Copy(buf, res.Body)
 
 		content := strings.Split(buf.String(), "\n")[0]
-		regionPattern := regexp.MustCompile(`=>\s((\w+-(\w{3}))|(\w{3}))`)
-		matchResults := strings.Split(regionPattern.FindString(content), " ")
-		region := strings.ToUpper(matchResults[len(matchResults)-1])
+		iataCodePattern := regexp.MustCompile(`=>\s((\w+-(\w{3}))|(\w{3}))`)
+		matchResults := strings.Split(iataCodePattern.FindString(content), " ")
+		iataCode := strings.ToUpper(matchResults[len(matchResults)-1])
 
-		result.Region = region
+		result.IATACode = iataCode
+		result.Region = cases.Title(language.AmericanEnglish).String(GetRegionFromIATACode(iataCode))
 
 		return result
 	}

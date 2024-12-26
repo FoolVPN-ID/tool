@@ -6,6 +6,7 @@ require (
 	github.com/LalatinaHub/LatinaSub-go v0.0.0-20241223003120-b71c323cd25d
 	github.com/gin-gonic/gin v1.10.0
 	github.com/sagernet/sing-box v1.10.5
+	golang.org/x/text v0.21.0
 )
 
 require (
@@ -92,7 +93,6 @@ require (
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	golang.org/x/tools v0.27.0 // indirect
 	golang.zx2c4.com/wintun v0.0.0-20230126152724-0fa3db229ce2 // indirect

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/FoolVPN-ID/RegionalCheck/modules/library"
+	"github.com/FoolVPN-ID/RegionalCheck/modules/regioncheck"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,14 +17,14 @@ func Start() {
 			return
 		}
 
-		lb := library.MakeLibrary()
-		err := lb.Run(rawConfig)
+		rc := regioncheck.MakeLibrary()
+		err := rc.Run(rawConfig)
 		if err != nil {
 			ctx.String(500, err.Error())
 			return
 		}
 
-		ctx.JSON(200, lb.Result)
+		ctx.JSON(200, rc.Result)
 	})
 
 	r.Run() // Listen on 0.0.0.0:8080
