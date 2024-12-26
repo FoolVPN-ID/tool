@@ -1,12 +1,19 @@
 package api
 
 import (
-	"github.com/FoolVPN-ID/RegionalCheck/modules/regioncheck"
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/FoolVPN-ID/tool/modules/regioncheck"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func Start() {
+func buildServer() *http.Server {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
 	// Middlewares
@@ -38,5 +45,26 @@ func Start() {
 		ctx.JSON(200, rc.Result)
 	})
 
-	r.Run() // Listen on 0.0.0.0:8080
+	return &http.Server{
+		Addr:    ":8080",
+		Handler: r.Handler(),
+	}
+}
+
+func RunWithContext(ctx context.Context) {
+	srv := buildServer()
+	go (func() {
+		if err := srv.ListenAndServe(); err != nil {
+			if err != http.ErrServerClosed {
+				log.Fatal(err)
+			}
+		}
+	})()
+
+	<-ctx.Done()
+	fmt.Println("API is shutting down...")
+
+	localCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	srv.Shutdown(localCtx)
 }

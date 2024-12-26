@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/FoolVPN-ID/RegionalCheck/modules/config"
+	"github.com/FoolVPN-ID/tool/modules/config"
 	box "github.com/sagernet/sing-box"
 )
 
