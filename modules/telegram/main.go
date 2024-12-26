@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/FoolVPN-ID/tool/common"
 	"github.com/NicoNex/echotron/v3"
 )
 
@@ -41,24 +42,11 @@ func makeDispatcher() *echotron.Dispatcher {
 }
 
 func (bot *botStruct) Update(update *echotron.Update) {
-	// Middlewares
-	go bot.SendChatAction(echotron.Typing, bot.chatID, nil)
+	// Error handler
+	defer common.RecoverFromPanic()
 
-	// Update handlers
-	var messageText = update.Message.Text
-	if messageText == "/start" {
-		go bot.handlers.cmdStartHandler(bot, update)
-	} else if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
-		bot.localTemp.matchedText = proxyIP
-		go bot.handlers.listenProxyIPUpdate(bot, update)
-	} else if rawConfig := CONFIG_VPN_REGEXP.FindString(messageText); rawConfig != "" {
-		bot.localTemp.matchedText = rawConfig
-		fmt.Println(rawConfig)
-	} else {
-		go bot.handlers.cmdStartHandler(bot, update)
-	}
-
-	go bot.SetMessageReaction(bot.chatID, update.Message.ID, &echotron.MessageReactionOptions{
+	// Defers
+	defer bot.SetMessageReaction(bot.chatID, update.Message.ID, &echotron.MessageReactionOptions{
 		Reaction: []echotron.ReactionType{
 			{
 				Type:  "emoji",
@@ -66,4 +54,21 @@ func (bot *botStruct) Update(update *echotron.Update) {
 			},
 		},
 	})
+
+	// Middlewares
+	go bot.SendChatAction(echotron.Typing, bot.chatID, nil)
+
+	// Update handlers
+	var messageText = update.Message.Text
+	if messageText == "/start" {
+		bot.handlers.cmdStartHandler(bot, update)
+	} else if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
+		bot.localTemp.matchedText = proxyIP
+		bot.handlers.listenProxyIPUpdate(bot, update)
+	} else if rawConfig := CONFIG_VPN_REGEXP.FindString(messageText); rawConfig != "" {
+		bot.localTemp.matchedText = rawConfig
+		fmt.Println(rawConfig)
+	} else {
+		bot.handlers.cmdStartHandler(bot, update)
+	}
 }

@@ -2,6 +2,7 @@ package common
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 	"time"
 )
@@ -15,4 +16,13 @@ func MakeHTTPClient() *http.Client {
 			},
 		},
 	}
+}
+
+func RecoverFromPanic() any {
+	if err := recover(); err != nil {
+		log.Printf("Recovered from panic: %v\n", err)
+		return err
+	}
+
+	return ""
 }
