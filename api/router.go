@@ -2,11 +2,22 @@ package api
 
 import (
 	"github.com/FoolVPN-ID/RegionalCheck/modules/regioncheck"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Start() {
 	r := gin.Default()
+
+	// Middlewares
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
+
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "Hello from gin")
 	})
