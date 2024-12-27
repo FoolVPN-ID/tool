@@ -3,7 +3,7 @@ module github.com/FoolVPN-ID/tool
 go 1.23.2
 
 require (
-	github.com/LalatinaHub/LatinaSub-go v0.0.0-20241223003120-b71c323cd25d
+	github.com/LalatinaHub/LatinaSub-go v0.0.0-20241227023226-2c368a77e18c
 	github.com/NicoNex/echotron/v3 v3.39.0
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
