@@ -7,7 +7,7 @@ import (
 	"github.com/NicoNex/echotron/v3"
 )
 
-func (handler *updateHandlers) listenVPNConfigUpdate(bot *botStruct, _ *echotron.Update) {
+func (handler *updateHandlers) configRegioncheck(bot *botStruct, _ *echotron.Update) {
 	rawConfig := bot.localTemp.matchedText
 	rc := regioncheck.MakeLibrary()
 	err := rc.Run(rawConfig)

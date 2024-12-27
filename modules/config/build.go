@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"net/netip"
 
 	"github.com/LalatinaHub/LatinaSub-go/helper"
@@ -12,13 +11,12 @@ import (
 )
 
 func BuildSingboxConfig(rawConfig string) (option.Options, error) {
-	fmt.Println(rawConfig)
 	outbound, err := provider.Parse(rawConfig)
 	if err != nil {
 		return option.Options{}, err
 	}
 	if len(outbound) == 0 {
-		return option.Options{}, errors.New("PARSING_FAILED")
+		return option.Options{}, errors.New("parsing failed")
 	}
 
 	config := option.Options{

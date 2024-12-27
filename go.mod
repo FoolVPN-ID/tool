@@ -3,10 +3,11 @@ module github.com/FoolVPN-ID/tool
 go 1.23.2
 
 require (
-	github.com/LalatinaHub/LatinaSub-go v0.0.0-20241227023226-2c368a77e18c
+	github.com/LalatinaHub/LatinaSub-go v0.0.0-20241227142240-d612b367016b
 	github.com/NicoNex/echotron/v3 v3.39.0
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
+	github.com/sagernet/sing v0.5.1
 	github.com/sagernet/sing-box v1.10.5
 	golang.org/x/text v0.21.0
 )
@@ -68,7 +69,6 @@ require (
 	github.com/sagernet/nftables v0.3.0-beta.4 // indirect
 	github.com/sagernet/quic-go v0.48.2-beta.1 // indirect
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691 // indirect
-	github.com/sagernet/sing v0.5.1 // indirect
 	github.com/sagernet/sing-dns v0.3.0 // indirect
 	github.com/sagernet/sing-mux v0.2.1 // indirect
 	github.com/sagernet/sing-quic v0.3.1 // indirect

@@ -31,7 +31,7 @@ var (
 	}
 )
 
-func (handler *updateHandlers) listenProxyIPUpdate(bot *botStruct, _ *echotron.Update) {
+func (handler *updateHandlers) proxyipCheck(bot *botStruct, _ *echotron.Update) {
 	proxyIP := bot.localTemp.matchedText
 
 	buf := new(strings.Builder)

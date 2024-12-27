@@ -46,11 +46,14 @@ func Netflix(httpClient http.Client) runnerResultStruct {
 
 	if res.StatusCode == 200 && err == nil {
 		finalURL := res.Request.URL.String()
-		countryCodePattern := regexp.MustCompile(`(\w{2})\/$`)
-		matchResults := strings.ReplaceAll(countryCodePattern.FindString(finalURL), "/", "")
+		countryCodePattern := regexp.MustCompile(`com\/(\w{2})`)
+		matchResults := countryCodePattern.FindStringSubmatch(finalURL)
 
-		result.Country = strings.ToUpper(matchResults)
-		result.Region = result.Country
+		if len(matchResults) == 2 {
+			result.Country = strings.ToUpper(matchResults[1])
+			result.Region = result.Country
+		}
+
 		return result
 	}
 

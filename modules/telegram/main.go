@@ -62,11 +62,12 @@ func (bot *botStruct) Update(update *echotron.Update) {
 	var messageText = update.Message.Text
 	if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
 		bot.localTemp.matchedText = proxyIP
-		bot.handlers.listenProxyIPUpdate(bot, update)
+		bot.handlers.proxyipCheck(bot, update)
 	} else if rawConfig := CONFIG_VPN_REGEXP.FindString(messageText); rawConfig != "" {
 		bot.localTemp.matchedText = rawConfig
-		bot.handlers.listenVPNConfigUpdate(bot, update)
+		bot.handlers.configSubconverter(bot, update)
+		bot.handlers.configRegioncheck(bot, update)
 	} else {
-		bot.handlers.cmdStartHandler(bot, update)
+		bot.handlers.defaultHandler(bot, update)
 	}
 }

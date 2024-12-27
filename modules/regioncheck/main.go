@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/FoolVPN-ID/tool/common"
 	"github.com/FoolVPN-ID/tool/modules/config"
 	box "github.com/sagernet/sing-box"
 )
@@ -58,6 +59,7 @@ func (lib *LibraryStruct) Run(rawConfig string) error {
 	for _, runner := range lib.Runner {
 		wg.Add(1)
 		go func() {
+			defer common.RecoverFromPanic()
 			defer wg.Done()
 			result := runner(*httpClient)
 			lib.Result = append(lib.Result, result)
