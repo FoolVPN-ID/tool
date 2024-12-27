@@ -20,7 +20,6 @@ func (handler *updateHandlers) listenVPNConfigUpdate(bot *botStruct, _ *echotron
 	for _, data := range rc.Result {
 		message += fmt.Sprintf("<b>%s</b>\n", data.Name)
 		message += "<blockquote><code>"
-		message += fmt.Sprintf("Country  : %s\n", data.Country)
 		message += fmt.Sprintf("IATACode : %s\n", data.IATACode)
 		message += fmt.Sprintf("Region   : %s\n", data.Region)
 		message += fmt.Sprintf("Ping     : %d ms\n", data.Delay)

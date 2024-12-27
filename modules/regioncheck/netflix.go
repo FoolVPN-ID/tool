@@ -50,6 +50,7 @@ func Netflix(httpClient http.Client) runnerResultStruct {
 		matchResults := strings.ReplaceAll(countryCodePattern.FindString(finalURL), "/", "")
 
 		result.Country = strings.ToUpper(matchResults)
+		result.Region = result.Country
 		return result
 	}
 
