@@ -60,14 +60,12 @@ func (bot *botStruct) Update(update *echotron.Update) {
 
 	// Update handlers
 	var messageText = update.Message.Text
-	if messageText == "/start" {
-		bot.handlers.cmdStartHandler(bot, update)
-	} else if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
+	if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
 		bot.localTemp.matchedText = proxyIP
 		bot.handlers.listenProxyIPUpdate(bot, update)
 	} else if rawConfig := CONFIG_VPN_REGEXP.FindString(messageText); rawConfig != "" {
 		bot.localTemp.matchedText = rawConfig
-		fmt.Println(rawConfig)
+		bot.handlers.listenVPNConfigUpdate(bot, update)
 	} else {
 		bot.handlers.cmdStartHandler(bot, update)
 	}

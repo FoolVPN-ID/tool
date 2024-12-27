@@ -17,6 +17,7 @@ func MakeLibrary() LibraryStruct {
 	return LibraryStruct{
 		Runner: []func(http.Client) runnerResultStruct{
 			YoutubeCDN,
+			Netflix,
 		},
 	}
 }

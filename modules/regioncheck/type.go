@@ -4,8 +4,9 @@ import "net/http"
 
 type runnerResultStruct struct {
 	Name     string `json:"name"`
-	IATACode string `json:"iata_code"`
-	Region   string `json:"region"`
+	IATACode string `json:"iata_code,omitempty"`
+	Region   string `json:"region,omitempty"`
+	Country  string `json:"country,omitempty"`
 	Delay    int    `json:"delay"`
 	Error    error  `json:"error,omitempty"`
 }
