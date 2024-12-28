@@ -12,6 +12,7 @@ import (
 	"github.com/FoolVPN-ID/tool/modules/subconverter"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/sagernet/sing-box/option"
 )
 
 func buildServer() *http.Server {
@@ -48,8 +49,9 @@ func buildServer() *http.Server {
 	})
 	r.POST("/api/v1/convert", func(ctx *gin.Context) {
 		type convertAPIFormStruct struct {
-			URL    string
-			Format string
+			URL      string `json:"url"`
+			Format   string `json:"format"`
+			Template string `json:"template"` // Only cf for now
 		}
 		apiForm := convertAPIFormStruct{
 			Format: "raw",
@@ -70,22 +72,37 @@ func buildServer() *http.Server {
 			subconv.ToRaw()
 			ctx.String(200, strings.Join(subconv.Result.Raw, "\n"))
 		case "clash":
-			// Not implemented yet
-			ctx.String(204, "")
-		case "bfr":
-			err := subconv.ToBFR()
+			err := subconv.ToClash()
 			if err != nil {
 				ctx.String(500, err.Error())
 				return
 			}
-			ctx.JSON(200, subconv.Result.BFR)
-		case "sfa":
-			err := subconv.ToSFA()
+
+			ctx.YAML(200, subconv.Result.Clash)
+		case "bfr", "sfa":
+			var (
+				result option.Options
+				err    error
+			)
+
+			if apiForm.Format == "bfr" {
+				err = subconv.ToBFR()
+				result = subconv.Result.BFR
+			} else {
+				err = subconv.ToSFA()
+				result = subconv.Result.SFA
+			}
+
 			if err != nil {
 				ctx.String(500, err.Error())
 				return
 			}
-			ctx.JSON(200, subconv.Result.SFA)
+
+			if apiForm.Template == "cf" {
+				result = subconv.PostTemplateSingBox(apiForm.Template, result)
+			}
+
+			ctx.JSON(200, result)
 		}
 	})
 

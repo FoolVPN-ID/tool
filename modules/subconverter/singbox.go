@@ -53,7 +53,7 @@ func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (opti
 
 	for _, newOutbound := range subconv.Outbounds {
 		for i := range baseOptions.Outbounds {
-			var oldOutbound = baseOptions.Outbounds[i]
+			var oldOutbound = &baseOptions.Outbounds[i]
 
 			switch oldOutbound.Tag {
 			case "Internet", "Lock Region ID": // selector
@@ -61,8 +61,6 @@ func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (opti
 			case "Best Latency": // url-test
 				oldOutbound.URLTestOptions.Outbounds = append(oldOutbound.URLTestOptions.Outbounds, newOutbound.Tag)
 			}
-
-			baseOptions.Outbounds[i] = oldOutbound
 		}
 		baseOptions.Outbounds = append(baseOptions.Outbounds, newOutbound)
 	}
