@@ -17,19 +17,29 @@ func (handler *updateHandlers) configSubconverter(bot *botStruct, _ *echotron.Up
 	}
 
 	// Convert
+	subconv.ToClash()
 	subconv.ToSFA()
 	subconv.ToBFR()
 
 	// Send result
 	var (
+		uniqueID = time.Now().Unix()
+
+		clashByte = []byte(subconv.Result.Clash)
+		clashFile = echotron.NewInputFileBytes(fmt.Sprintf("Clash_%v.txt", uniqueID), clashByte)
+
 		sfaByte, _ = json.MarshalIndent(subconv.Result.SFA, "", "  ")
-		sfaFile    = echotron.NewInputFileBytes(fmt.Sprintf("SFA_%v.txt", time.Now().Unix()), sfaByte)
+		sfaFile    = echotron.NewInputFileBytes(fmt.Sprintf("SFA_%v.txt", uniqueID), sfaByte)
 
 		bfrByte, _ = json.MarshalIndent(subconv.Result.BFR, "", "  ")
-		bfrFile    = echotron.NewInputFileBytes(fmt.Sprintf("BFR_%v.txt", time.Now().Unix()), bfrByte)
+		bfrFile    = echotron.NewInputFileBytes(fmt.Sprintf("BFR_%v.txt", uniqueID), bfrByte)
 	)
 
 	bot.SendMediaGroup(bot.chatID, []echotron.GroupableInputMedia{
+		echotron.InputMediaDocument{
+			Type:  echotron.MediaTypeDocument,
+			Media: clashFile,
+		},
 		echotron.InputMediaDocument{
 			Type:  echotron.MediaTypeDocument,
 			Media: sfaFile,

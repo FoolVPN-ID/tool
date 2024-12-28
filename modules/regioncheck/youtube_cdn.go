@@ -14,6 +14,7 @@ import (
 func YoutubeCDN(httpClient http.Client) runnerResultStruct {
 	result := runnerResultStruct{
 		Name: "Youtube CDN",
+		OK:   false,
 	}
 
 	start := time.Now()
@@ -33,6 +34,7 @@ func YoutubeCDN(httpClient http.Client) runnerResultStruct {
 
 		result.IATACode = iataCode
 		result.Region = cases.Title(language.AmericanEnglish).String(GetRegionFromIATACode(iataCode))
+		result.OK = true
 
 		return result
 	}

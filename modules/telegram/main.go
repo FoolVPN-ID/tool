@@ -60,11 +60,11 @@ func (bot *botStruct) Update(update *echotron.Update) {
 
 	// Update handlers
 	var messageText = update.Message.Text
-	if proxyIP := PROXY_IP_REGEXP.FindString(messageText); proxyIP != "" {
-		bot.localTemp.matchedText = proxyIP
+	if PROXY_IP_REGEXP.MatchString(messageText) {
+		bot.localTemp.matchedText = messageText
 		bot.handlers.proxyipCheck(bot, update)
-	} else if rawConfig := CONFIG_VPN_REGEXP.FindString(messageText); rawConfig != "" {
-		bot.localTemp.matchedText = rawConfig
+	} else if CONFIG_VPN_REGEXP.MatchString(messageText) {
+		bot.localTemp.matchedText = messageText
 		bot.handlers.configSubconverter(bot, update)
 		bot.handlers.configRegioncheck(bot, update)
 	} else {

@@ -11,6 +11,7 @@ import (
 func Netflix(httpClient http.Client) runnerResultStruct {
 	result := runnerResultStruct{
 		Name: "Netflix",
+		OK:   false,
 	}
 
 	var (
@@ -52,6 +53,7 @@ func Netflix(httpClient http.Client) runnerResultStruct {
 		if len(matchResults) == 2 {
 			result.Country = strings.ToUpper(matchResults[1])
 			result.Region = result.Country
+			result.OK = true
 		}
 
 		return result

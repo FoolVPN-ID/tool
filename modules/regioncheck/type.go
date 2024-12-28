@@ -4,11 +4,12 @@ import "net/http"
 
 type runnerResultStruct struct {
 	Name     string `json:"name"`
-	IATACode string `json:"iata_code,omitempty"`
-	Region   string `json:"region,omitempty"`
-	Country  string `json:"country,omitempty"`
+	IATACode string `json:"iata_code"`
+	Region   string `json:"region"`
+	Country  string `json:"country"`
 	Delay    int    `json:"delay"`
-	Error    error  `json:"error,omitempty"`
+	Error    error  `json:"error"`
+	OK       bool   `json:"ok"`
 }
 
 type LibraryStruct struct {

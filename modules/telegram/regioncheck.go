@@ -2,13 +2,23 @@ package telegram
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/FoolVPN-ID/tool/modules/regioncheck"
 	"github.com/NicoNex/echotron/v3"
 )
 
 func (handler *updateHandlers) configRegioncheck(bot *botStruct, _ *echotron.Update) {
-	rawConfig := bot.localTemp.matchedText
+	var (
+		rawConfigs = strings.Split(bot.localTemp.matchedText, "\n")
+		rawConfig  = rawConfigs[0]
+	)
+
+	// Only check when single config is provided
+	if len(rawConfigs) > 1 {
+		return
+	}
+
 	rc := regioncheck.MakeLibrary()
 	err := rc.Run(rawConfig)
 	if err != nil {

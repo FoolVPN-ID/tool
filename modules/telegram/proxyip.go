@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/url"
 	"strings"
+	"sync"
 
 	"github.com/FoolVPN-ID/tool/common"
 	"github.com/FoolVPN-ID/tool/constant"
@@ -32,34 +33,33 @@ var (
 )
 
 func (handler *updateHandlers) proxyipCheck(bot *botStruct, _ *echotron.Update) {
-	proxyIP := bot.localTemp.matchedText
+	var (
+		wg       sync.WaitGroup
+		proxyIPs = strings.Split(bot.localTemp.matchedText, "\n")
 
-	buf := new(strings.Builder)
-	client := common.MakeHTTPClient()
+		checkResults []map[string]any
+	)
 
-	res, err := client.Get("https://" + constant.PROXYIP_CHECK_DOMAIN + fmt.Sprintf("?ip=%s", proxyIP))
-	if err != nil {
-		bot.SendMessage(fmt.Sprintf("Error while testing proxyip: %s", err.Error()), bot.chatID, nil)
-		return
+	for _, proxyip := range proxyIPs {
+		wg.Add(1)
+		go (func() {
+			defer common.RecoverFromPanic()
+			defer wg.Done()
+
+			result, err := checkProxyIP(proxyip)
+			if err != nil {
+				bot.SendMessage(fmt.Sprintf("Error while checking %v: %v", proxyip, err.Error()), bot.chatID, nil)
+				return
+			}
+			checkResults = append(checkResults, result)
+		})()
 	}
 
-	if res.StatusCode == 200 {
-		io.Copy(buf, res.Body)
-		result := buf.String()
+	// Wait for waitgroup
+	wg.Wait()
 
-		var resultInJson map[string]interface{}
-		err := json.Unmarshal([]byte(result), &resultInJson)
-		if err != nil {
-			bot.SendMessage("Failed while parsing json", bot.chatID, nil)
-			return
-		}
-
-		if resultInJson["proxyip"] == false {
-			bot.SendMessage("Proxy is inactive", bot.chatID, nil)
-			return
-		}
-
-		var message string = "<b>TEST RESULT</b>\n"
+	var message string = "<b>TEST RESULT</b>\n\n"
+	for _, resultInJson := range checkResults {
 		message += "<blockquote><code>"
 		message += fmt.Sprintf("Active  : %v\n", resultInJson["proxyip"])
 		message += fmt.Sprintf("IP      : %v\n", resultInJson["proxy"])
@@ -71,35 +71,63 @@ func (handler *updateHandlers) proxyipCheck(bot *botStruct, _ *echotron.Update) 
 		message += fmt.Sprintf("City    : %v\n", resultInJson["city"])
 		message += fmt.Sprintf("Colo    : %v\n", resultInJson["colo"])
 		message += "</code></blockquote>\n\n"
+	}
 
+	if len(checkResults) == 1 {
 		// Build config
 		var (
 			defaultConfig, _ = url.Parse(configSample)
 			defaultQueries   = defaultConfig.Query()
+			resultInJson     = checkResults[0]
 		)
-		defaultConfig.Path = fmt.Sprintf("/%v", proxyIP)
+		defaultConfig.Path = fmt.Sprintf("/%v-%v", resultInJson["proxy"], resultInJson["port"])
 
 		for _, vpn := range []string{"vless", "trojan"} {
 			// Select random cf server
 			server := servers[rand.Intn(len(servers))]
 			defaultQueries.Set("host", server["domain"])
 			defaultQueries.Set("sni", server["domain"])
+			defaultConfig.Scheme = vpn
 			defaultConfig.RawQuery = defaultQueries.Encode()
 			defaultConfig.Fragment = fmt.Sprintf("%v %v [%v]", resultInJson["country"], resultInJson["asOrganization"], server["remark"])
 
 			// Resume build config
 			message += fmt.Sprintf("<b>%s</b>", strings.ToUpper(vpn))
 			message += "<blockquote><code>"
-			defaultConfig.Scheme = vpn
 			message += defaultConfig.String()
 			message += "</code></blockquote>\n"
 			message += fmt.Sprintf("Credit: %v\n\n", server["maintainer"])
 		}
-
-		bot.SendMessage(message, bot.chatID, &echotron.MessageOptions{
-			ParseMode: echotron.HTML,
-		})
-	} else {
-		bot.SendMessage(fmt.Sprintf("Error return code %d", res.StatusCode), bot.chatID, nil)
 	}
+
+	bot.SendMessage(message, bot.chatID, &echotron.MessageOptions{
+		ParseMode: echotron.HTML,
+	})
+}
+
+func checkProxyIP(proxyip string) (map[string]any, error) {
+	var (
+		resultInJson map[string]any
+		buf          = new(strings.Builder)
+		client       = common.MakeHTTPClient()
+	)
+
+	res, err := client.Get("https://" + constant.PROXYIP_CHECK_DOMAIN + fmt.Sprintf("?ip=%s", proxyip))
+	if err != nil {
+		return resultInJson, err
+	}
+
+	if res.StatusCode == 200 {
+		io.Copy(buf, res.Body)
+		result := buf.String()
+
+		err := json.Unmarshal([]byte(result), &resultInJson)
+		if err != nil {
+			return resultInJson, err
+		}
+
+		return resultInJson, nil
+	}
+
+	return resultInJson, err
 }
