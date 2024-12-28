@@ -14,6 +14,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
+replace github.com/metacubex/mihomo => github.com/FoolVPN-ID/mihomo v1.19.1-0.20241228110132-02c9086d9d86
+
 require (
 	berty.tech/go-libtor v1.0.385 // indirect
 	github.com/RyuaNerin/go-krypto v1.2.4 // indirect

@@ -1,5 +1,7 @@
 berty.tech/go-libtor v1.0.385 h1:RWK94C3hZj6Z2GdvePpHJLnWYobFr3bY/OdUJ5aoEXw=
 berty.tech/go-libtor v1.0.385/go.mod h1:9swOOQVb+kmvuAlsgWUK/4c52pm69AdbJsxLzk+fJEw=
+github.com/FoolVPN-ID/mihomo v1.19.1-0.20241228110132-02c9086d9d86 h1:RQMDgyIvlNUOq4KJ6h3COMfHRwkQc8d47NRA5mOsevs=
+github.com/FoolVPN-ID/mihomo v1.19.1-0.20241228110132-02c9086d9d86/go.mod h1:5J+RkE6ewWkQJ1EJ5ve07msxZSWWBPB9BSZIZDahM9s=
 github.com/LalatinaHub/LatinaSub-go v0.0.0-20241227142240-d612b367016b h1:xobAgDpUJycwOA5YsNqA7Ve6n5AoXSfl+KzmZzxFyhI=
 github.com/LalatinaHub/LatinaSub-go v0.0.0-20241227142240-d612b367016b/go.mod h1:7DU0O6ZwI/KnAussZ4OA1iC6LAIFQijcjL6xxmRRGMU=
 github.com/NicoNex/echotron/v3 v3.39.0 h1:DIOskt7z2oLt6uk3eyM09XJJzDsIJuRlJXZdoE/H/Zs=
@@ -118,8 +120,6 @@ github.com/mdlayher/socket v0.5.1 h1:VZaqt6RkGkt2OE9l3GcC6nZkqD3xKeQLyfleW/uBcos
 github.com/mdlayher/socket v0.5.1/go.mod h1:TjPLHI1UgwEv5J1B5q0zTZq12A/6H7nKmtTanQE37IQ=
 github.com/metacubex/chacha v0.1.0 h1:tg9RSJ18NvL38cCWNyYH1eiG6qDCyyXIaTLQthon0sc=
 github.com/metacubex/chacha v0.1.0/go.mod h1:Djn9bPZxLTXbJFSeyo0/qzEzQI+gUSSzttuzZM75GH8=
-github.com/metacubex/mihomo v1.19.1-0.20241228033945-a9ce5da09d38 h1:dGe1ABA/LytmDtErjQMFqH+vVJfWIsnMkO96qD/AF30=
-github.com/metacubex/mihomo v1.19.1-0.20241228033945-a9ce5da09d38/go.mod h1:5J+RkE6ewWkQJ1EJ5ve07msxZSWWBPB9BSZIZDahM9s=
 github.com/metacubex/randv2 v0.2.0 h1:uP38uBvV2SxYfLj53kuvAjbND4RUDfFJjwr4UigMiLs=
 github.com/metacubex/randv2 v0.2.0/go.mod h1:kFi2SzrQ5WuneuoLLCMkABtiBu6VRrMrWFqSPyj2cxY=
 github.com/metacubex/sing-shadowsocks v0.2.8 h1:wIhlaigswzjPw4hej75sEvWte3QR0+AJRafgwBHO5B4=

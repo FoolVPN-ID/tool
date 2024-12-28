@@ -20,6 +20,12 @@ func (subconv *subconverterStruct) ToClash() error {
 		return err
 	}
 
+	/**
+	TODO
+	- Build full clash meta config
+	- Test config
+	*/
+
 	subconv.Result.Clash = string(out)
 	return nil
 }
