@@ -2,7 +2,6 @@ package subconverter
 
 import (
 	"regexp"
-	"slices"
 
 	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
@@ -35,11 +34,11 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 		for i := range singboxConfig.Route.Rules {
 			rule := &singboxConfig.Route.Rules[i]
 			if rule.Type == constant.RuleTypeDefault {
-				if slices.Contains(rule.DefaultOptions.Network, "udp") {
+				if rule.DefaultOptions.Port != nil || rule.DefaultOptions.PortRange != nil {
 					switch rule.DefaultOptions.Outbound {
-					case constant.TypeBlock, constant.TypeDirect:
+					case constant.TypeDirect, constant.TypeBlock, "dns-out":
 					default:
-						rule.DefaultOptions.Outbound = udpOutbound.Tag
+						rule.DefaultOptions.Network = option.Listable[string]{"tcp"}
 					}
 				}
 			}
