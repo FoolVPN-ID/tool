@@ -7,6 +7,7 @@ import (
 
 	"github.com/FoolVPN-ID/tool/modules/subconverter"
 	"github.com/NicoNex/echotron/v3"
+	"gopkg.in/yaml.v3"
 )
 
 func (handler *updateHandlers) configSubconverter(bot *botStruct, _ *echotron.Update) {
@@ -25,8 +26,8 @@ func (handler *updateHandlers) configSubconverter(bot *botStruct, _ *echotron.Up
 	var (
 		uniqueID = time.Now().Unix()
 
-		clashByte = []byte(subconv.Result.Clash)
-		clashFile = echotron.NewInputFileBytes(fmt.Sprintf("Clash_%v.txt", uniqueID), clashByte)
+		clashByte, _ = yaml.Marshal(subconv.Result.Clash)
+		clashFile    = echotron.NewInputFileBytes(fmt.Sprintf("Clash_%v.txt", uniqueID), clashByte)
 
 		sfaByte, _ = json.MarshalIndent(subconv.Result.SFA, "", "  ")
 		sfaFile    = echotron.NewInputFileBytes(fmt.Sprintf("SFA_%v.txt", uniqueID), sfaByte)

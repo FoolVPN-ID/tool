@@ -15,7 +15,7 @@ type subconverterStruct struct {
 	Proxies    []map[string]any
 	rawConfigs string
 	Result     struct {
-		Clash string
+		Clash map[string]any
 		Raw   []string
 		SFA   option.Options
 		BFR   option.Options

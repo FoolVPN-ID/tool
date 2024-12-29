@@ -72,13 +72,21 @@ func buildServer() *http.Server {
 			subconv.ToRaw()
 			ctx.String(200, strings.Join(subconv.Result.Raw, "\n"))
 		case "clash":
-			err := subconv.ToClash()
+			var (
+				result map[string]any
+				err    = subconv.ToClash()
+			)
 			if err != nil {
 				ctx.String(500, err.Error())
 				return
 			}
 
-			ctx.YAML(200, subconv.Result.Clash)
+			result = subconv.Result.Clash
+			if apiForm.Template == "cf" {
+				result = subconv.PostTemplateClash(apiForm.Template, result)
+			}
+
+			ctx.YAML(200, result)
 		case "bfr", "sfa":
 			var (
 				result option.Options

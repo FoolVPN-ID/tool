@@ -2,9 +2,6 @@ package subconverter
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
-	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -15,36 +12,21 @@ import (
 	"github.com/sagernet/sing/common/json"
 )
 
-var localConfig = make(map[string]string)
-
 func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (option.Options, error) {
-	// Make md5 of configURL
-	var (
-		configKeyHash = md5.Sum([]byte(configURL))
-		configKey     = hex.EncodeToString(configKeyHash[:])
+	var buf = new(strings.Builder)
 
-		buf = new(strings.Builder)
-	)
+	httpClient := common.MakeHTTPClient()
+	req, _ := http.NewRequest("GET", configURL, nil)
 
-	if localConfig[configKey] == "" {
-		httpClient := common.MakeHTTPClient()
-		req, _ := http.NewRequest("GET", configURL, nil)
-
-		res, err := httpClient.Do(req)
-		if err != nil {
-			return option.Options{}, err
-		}
-
-		if res.StatusCode == 200 {
-			reqBuf := new(strings.Builder)
-			io.Copy(reqBuf, res.Body)
-			localConfig[configKey] = reqBuf.String()
-		} else {
-			return option.Options{}, errors.New(res.Status)
-		}
+	res, err := httpClient.Do(req)
+	if err != nil {
+		return option.Options{}, err
 	}
 
-	io.Copy(buf, strings.NewReader(localConfig[configKey]))
+	if res.StatusCode == 200 {
+		io.Copy(buf, res.Body)
+	}
+
 	baseConfig := buf.String()
 	baseOptions, err := json.UnmarshalExtended[option.Options]([]byte(baseConfig))
 	if err != nil {

@@ -1,10 +1,12 @@
 package subconverter
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
+	"gopkg.in/yaml.v3"
 )
 
 const udpAccount = "trojan://t.me%2Ffoolvpn@172.67.73.39:443?path=%2Ftrojan-udp&security=tls&host=id1.foolvpn.me&type=ws&sni=id1.foolvpn.me#Trojan%20UDP"
@@ -53,4 +55,40 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 	}
 
 	return singboxConfig
+}
+
+func (subconv *subconverterStruct) PostTemplateClash(template string, clashConfig map[string]any) map[string]any {
+	if template == "cf" {
+		var (
+			udpSubconv, _ = MakeSubconverterFromConfig(udpAccount)
+			udpProxy      = udpSubconv.Proxies[0]
+		)
+
+		// Manipulate proxies
+		newClashProxies := []map[string]any{}
+		newClashProxiesByte, err := yaml.Marshal(clashConfig["proxies"])
+		if err != nil {
+			panic(err)
+		}
+
+		yaml.Unmarshal(newClashProxiesByte, &newClashProxies)
+		udpProxy["server"] = newClashProxies[len(newClashProxies)-1]["server"]
+		newClashProxies = append(newClashProxies, udpProxy)
+
+		// Manipulate rules
+		newClashRules := []string{}
+		newClashRulesByte, err := yaml.Marshal(clashConfig["rules"])
+		if err != nil {
+			panic(err)
+		}
+
+		yaml.Unmarshal(newClashRulesByte, &newClashRules)
+		newClashRules = append([]string{fmt.Sprintf("NETWORK,UDP,%s", udpProxy["name"])}, newClashRules...)
+
+		// Overwrite old map
+		clashConfig["proxies"] = newClashProxies
+		clashConfig["rules"] = newClashRules
+	}
+
+	return clashConfig
 }
