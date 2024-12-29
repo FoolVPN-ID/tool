@@ -30,7 +30,7 @@ func (subconv *subconverterStruct) ToClash() error {
 			},
 			{
 				"name":     "Selector",
-				"type":     "selector",
+				"type":     "select",
 				"interval": 300,
 				"proxies":  []string{},
 			},
