@@ -3,6 +3,7 @@ package subconverter
 import (
 	"fmt"
 	"regexp"
+	"slices"
 
 	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
@@ -83,7 +84,7 @@ func (subconv *subconverterStruct) PostTemplateClash(template string, clashConfi
 		}
 
 		yaml.Unmarshal(newClashRulesByte, &newClashRules)
-		newClashRules = append([]string{fmt.Sprintf("NETWORK,UDP,%s", udpProxy["name"])}, newClashRules...)
+		newClashRules = slices.Insert(newClashRules, len(newClashRules)-1, []string{fmt.Sprintf("NETWORK,UDP,%s", udpProxy["name"])}...)
 
 		// Overwrite old map
 		clashConfig["proxies"] = newClashProxies
