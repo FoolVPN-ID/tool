@@ -39,9 +39,13 @@ func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (opti
 
 			switch oldOutbound.Tag {
 			case "Internet", "Lock Region ID": // selector
-				oldOutbound.SelectorOptions.Outbounds = append(oldOutbound.SelectorOptions.Outbounds, newOutbound.Tag)
+				selectorOptions := oldOutbound.Options.(option.SelectorOutboundOptions)
+				selectorOptions.Outbounds = append(selectorOptions.Outbounds, newOutbound.Tag)
+				oldOutbound.Options = selectorOptions
 			case "Best Latency": // url-test
-				oldOutbound.URLTestOptions.Outbounds = append(oldOutbound.URLTestOptions.Outbounds, newOutbound.Tag)
+				urlTestOptions := oldOutbound.Options.(option.URLTestOutboundOptions)
+				urlTestOptions.Outbounds = append(urlTestOptions.Outbounds, newOutbound.Tag)
+				oldOutbound.Options = urlTestOptions
 			}
 		}
 		baseOptions.Outbounds = append(baseOptions.Outbounds, newOutbound)

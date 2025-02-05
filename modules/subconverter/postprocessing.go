@@ -7,6 +7,7 @@ import (
 
 	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing/common/json/badoption"
 	"gopkg.in/yaml.v3"
 )
 
@@ -14,22 +15,29 @@ const udpAccount = "trojan://t.me%2Ffoolvpn@172.67.73.39:443?path=%2Ftrojan-udp&
 
 func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxConfig option.Options) option.Options {
 	var (
-		udpSubconv, _ = MakeSubconverterFromConfig(udpAccount)
-		udpOutbound   = udpSubconv.Outbounds[0]
+		udpSubconv, _      = MakeSubconverterFromConfig(udpAccount)
+		udpOutbound        = udpSubconv.Outbounds[0]
+		udpOutboundOptions = udpOutbound.Options.(option.TrojanOutboundOptions)
 	)
 
 	if template == "cf" {
 		// Get used server address
-		udpOutbound.TrojanOptions.Server = subconv.Proxies[len(subconv.Proxies)-1]["server"].(string)
+		udpOutboundOptions.Server = subconv.Proxies[len(subconv.Proxies)-1]["server"].(string)
+		udpOutbound.Options = udpOutboundOptions
 		singboxConfig.Outbounds = append(singboxConfig.Outbounds, udpOutbound)
 
 		// Configure dns
 		for i := range singboxConfig.DNS.Servers {
-			dnsServer := &singboxConfig.DNS.Servers[i]
-			if regexp.MustCompile(`^\d`).MatchString(dnsServer.Address) {
-				if dnsServer.Detour != constant.TypeDirect {
-					dnsServer.Detour = udpOutbound.Tag
+			var (
+				dnsServer        = &singboxConfig.DNS.Servers[i]
+				dnsServerOptions = dnsServer.Options.(option.RemoteDNSServerOptions)
+			)
+			if regexp.MustCompile(`^\d`).MatchString(dnsServerOptions.Server) {
+				if dnsServerOptions.Detour != constant.TypeDirect {
+					dnsServerOptions.Detour = udpOutbound.Tag
 				}
+
+				dnsServer.Options = dnsServerOptions
 			}
 		}
 
@@ -38,10 +46,10 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 			rule := &singboxConfig.Route.Rules[i]
 			if rule.Type == constant.RuleTypeDefault {
 				if rule.DefaultOptions.Port != nil || rule.DefaultOptions.PortRange != nil {
-					switch rule.DefaultOptions.Outbound {
+					switch rule.DefaultOptions.RouteOptions.Outbound {
 					case constant.TypeDirect, constant.TypeBlock, "dns-out":
 					default:
-						rule.DefaultOptions.Network = option.Listable[string]{"tcp"}
+						rule.DefaultOptions.Network = badoption.Listable[string]{"tcp"}
 					}
 				}
 			}
@@ -49,8 +57,15 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 		singboxConfig.Route.Rules = append(singboxConfig.Route.Rules, option.Rule{
 			Type: constant.RuleTypeDefault,
 			DefaultOptions: option.DefaultRule{
-				Network:  option.Listable[string]{"udp"},
-				Outbound: udpOutbound.Tag,
+				RawDefaultRule: option.RawDefaultRule{
+					Network: badoption.Listable[string]{"udp"},
+				},
+				RuleAction: option.RuleAction{
+					Action: "route",
+					RouteOptions: option.RouteActionOptions{
+						Outbound: udpOutbound.Tag,
+					},
+				},
 			},
 		})
 	}

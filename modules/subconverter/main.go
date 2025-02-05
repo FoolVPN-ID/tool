@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/LalatinaHub/LatinaSub-go/provider"
+	"github.com/FoolVPN-ID/tool/modules/provider"
 	"github.com/metacubex/mihomo/common/convert"
 	"github.com/sagernet/sing-box/option"
 )

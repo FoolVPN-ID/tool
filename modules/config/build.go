@@ -2,12 +2,12 @@ package config
 
 import (
 	"errors"
-	"net/netip"
 
-	"github.com/LalatinaHub/LatinaSub-go/helper"
-	"github.com/LalatinaHub/LatinaSub-go/provider"
+	"github.com/FoolVPN-ID/tool/common"
+	"github.com/FoolVPN-ID/tool/modules/provider"
 	C "github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing/common/json/badoption"
 )
 
 func BuildSingboxConfig(rawConfig string) (option.Options, error) {
@@ -24,22 +24,32 @@ func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 			Disabled: true,
 		},
 		DNS: &option.DNSOptions{
-			Servers: []option.DNSServerOptions{
-				{
-					Tag:     "default-dns",
-					Address: "1.1.1.1",
-					Detour:  "direct",
+			RawDNSOptions: option.RawDNSOptions{
+				Servers: []option.NewDNSServerOptions{
+					{
+						Tag: "default-dns",
+						Options: option.RemoteDNSServerOptions{
+							ServerOptions: option.ServerOptions{
+								Server: "1.1.1.1",
+							},
+							LocalDNSServerOptions: option.LocalDNSServerOptions{
+								DialerOptions: option.DialerOptions{
+									Detour: "direct",
+								},
+							},
+						},
+					},
 				},
+				Final: "default-dns",
 			},
-			Final: "default-dns",
 		},
 		Inbounds: []option.Inbound{
 			{
 				Type: C.TypeMixed,
-				MixedOptions: option.HTTPMixedInboundOptions{
+				Options: option.HTTPMixedInboundOptions{
 					ListenOptions: option.ListenOptions{
-						Listen:     option.NewListenAddress(netip.IPv4Unspecified()),
-						ListenPort: uint16(helper.GetFreePort()),
+						Listen:     &badoption.Addr{},
+						ListenPort: uint16(common.GetFreePort()),
 					},
 				},
 			},
@@ -55,16 +65,44 @@ func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 			Rules: []option.Rule{
 				{
 					Type: C.RuleTypeDefault,
-					DefaultOptions: option.DefaultRule{
-						Protocol: option.Listable[string]{"dns"},
-						Outbound: "direct",
+					LogicalOptions: option.LogicalRule{
+						RawLogicalRule: option.RawLogicalRule{
+							Mode:   "or",
+							Invert: false,
+							Rules: []option.Rule{
+								{
+									DefaultOptions: option.DefaultRule{
+										RawDefaultRule: option.RawDefaultRule{
+											Protocol: badoption.Listable[string]{"dns"},
+										},
+									},
+								},
+								{
+									DefaultOptions: option.DefaultRule{
+										RawDefaultRule: option.RawDefaultRule{
+											Port: badoption.Listable[uint16]{53},
+										},
+									},
+								},
+							},
+						},
+						RuleAction: option.RuleAction{
+							Action: "hijack-dns",
+						},
 					},
 				},
 				{
 					Type: C.RuleTypeDefault,
 					DefaultOptions: option.DefaultRule{
-						Network:  option.Listable[string]{"udp"},
-						Outbound: "direct",
+						RawDefaultRule: option.RawDefaultRule{
+							Network: badoption.Listable[string]{"udp"},
+						},
+						RuleAction: option.RuleAction{
+							Action: "route",
+							RouteOptions: option.RouteActionOptions{
+								Outbound: "direct",
+							},
+						},
 					},
 				},
 			},

@@ -12,6 +12,7 @@ import (
 	"github.com/FoolVPN-ID/tool/common"
 	"github.com/FoolVPN-ID/tool/modules/config"
 	box "github.com/sagernet/sing-box"
+	"github.com/sagernet/sing-box/option"
 )
 
 func MakeLibrary() LibraryStruct {
@@ -42,7 +43,7 @@ func (lib *LibraryStruct) Run(rawConfig string) error {
 	boxInstance.Start()
 
 	// Build http client
-	listenPort := boxConfig.Inbounds[0].MixedOptions.ListenPort
+	listenPort := boxConfig.Inbounds[0].Options.(option.HTTPMixedInboundOptions).ListenPort
 	proxyClient, _ := url.Parse(fmt.Sprintf("socks5://0.0.0.0:%d", listenPort))
 	httpClient := &http.Client{
 		Timeout: 10 * time.Second,
