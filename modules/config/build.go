@@ -2,11 +2,13 @@ package config
 
 import (
 	"errors"
+	"net/netip"
 
 	"github.com/FoolVPN-ID/tool/common"
 	"github.com/FoolVPN-ID/tool/modules/provider"
 	C "github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
+	CM "github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/json/badoption"
 )
 
@@ -24,31 +26,21 @@ func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 			Disabled: true,
 		},
 		DNS: &option.DNSOptions{
-			RawDNSOptions: option.RawDNSOptions{
-				Servers: []option.NewDNSServerOptions{
-					{
-						Tag: "default-dns",
-						Options: option.RemoteDNSServerOptions{
-							ServerOptions: option.ServerOptions{
-								Server: "1.1.1.1",
-							},
-							LocalDNSServerOptions: option.LocalDNSServerOptions{
-								DialerOptions: option.DialerOptions{
-									Detour: "direct",
-								},
-							},
-						},
-					},
+			Servers: []option.DNSServerOptions{
+				{
+					Tag:     "default-dns",
+					Address: "1.1.1.1",
+					Detour:  "direct",
 				},
-				Final: "default-dns",
 			},
+			Final: "default-dns",
 		},
 		Inbounds: []option.Inbound{
 			{
 				Type: C.TypeMixed,
 				Options: option.HTTPMixedInboundOptions{
 					ListenOptions: option.ListenOptions{
-						Listen:     &badoption.Addr{},
+						Listen:     CM.Ptr(badoption.Addr(netip.IPv4Unspecified())),
 						ListenPort: uint16(common.GetFreePort()),
 					},
 				},

@@ -125,6 +125,8 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/oasisprotocol/deoxysii v0.0.0-20220228165953-2091330c22b7 h1:1102pQc2SEPp5+xrS26wEaeb26sZy6k9/ZXlZN+eXE4=
 github.com/oasisprotocol/deoxysii v0.0.0-20220228165953-2091330c22b7/go.mod h1:UqoUn6cHESlliMhOnKLWr+CBH+e3bazUPvFj1XZwAjs=
+github.com/oschwald/maxminddb-golang v1.12.0 h1:9FnTOD0YOhP7DGxGsq4glzpGy5+w7pq50AS6wALUMYs=
+github.com/oschwald/maxminddb-golang v1.12.0/go.mod h1:q0Nob5lTCqyQ8WT6FYgS1L7PXKVVbgiymefNwIjPzgY=
 github.com/pelletier/go-toml/v2 v2.2.3 h1:YmeHyLY8mFWbdkNWwpr+qIL2bEqT0o95WSdkNHvL12M=
 github.com/pelletier/go-toml/v2 v2.2.3/go.mod h1:MfCQTFTvCcUyyvvwm1+G6H/jORL20Xlb6rzQu9GuUkc=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -154,8 +156,10 @@ github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691/go.mod h1:B8lp4Wk
 github.com/sagernet/sing v0.2.18/go.mod h1:OL6k2F0vHmEzXz2KW19qQzu172FDgSbUSODylighuVo=
 github.com/sagernet/sing v0.6.0-beta.12.0.20250130112616-23af22fe01ff h1:aZeWJw/NkI3/NoXbNHzv2435nWYTV+ZDNDWXTnN9FjQ=
 github.com/sagernet/sing v0.6.0-beta.12.0.20250130112616-23af22fe01ff/go.mod h1:ARkL0gM13/Iv5VCZmci/NuoOlePoIsW0m7BWfln/Hak=
-github.com/sagernet/sing-box v1.12.0-alpha.3 h1:rakK40TTmtjrhxovbTYdfEIR4xdTSgtgsK4Uv7cTYi8=
-github.com/sagernet/sing-box v1.12.0-alpha.3/go.mod h1:J/vCejMJnJUedwZT7UdizGS6JFKMuTG2erctU/Fe8vA=
+github.com/sagernet/sing-box v1.11.1 h1:bs+LNhD/ikNPEtVGS69myDGkbhPArtzNMjAd8aSWO0M=
+github.com/sagernet/sing-box v1.11.1/go.mod h1:DmL1WKyrfaAEu5z88CtUeQBfELaEdUyQzLS5nzmRg8o=
+github.com/sagernet/sing-dns v0.4.0-beta.2 h1:HW94bUEp7K/vf5DlYz646LTZevQtJ0250jZa/UZRlbY=
+github.com/sagernet/sing-dns v0.4.0-beta.2/go.mod h1:8wuFcoFkWM4vJuQyg8e97LyvDwe0/Vl7G839WLcKDs8=
 github.com/sagernet/sing-mux v0.3.0-alpha.1 h1:IgNX5bJBpL41gGbp05pdDOvh/b5eUQ6cv9240+Ngipg=
 github.com/sagernet/sing-mux v0.3.0-alpha.1/go.mod h1:FTcImmdfW38Lz7b+HQ+mxxOth1lz4ao8uEnz+MwIJQE=
 github.com/sagernet/sing-quic v0.4.0-beta.4 h1:kKiMLGaxvVLDCSvCMYo4PtWd1xU6FTL7xvUAQfXO09g=

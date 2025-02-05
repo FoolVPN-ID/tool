@@ -28,16 +28,11 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 
 		// Configure dns
 		for i := range singboxConfig.DNS.Servers {
-			var (
-				dnsServer        = &singboxConfig.DNS.Servers[i]
-				dnsServerOptions = dnsServer.Options.(option.RemoteDNSServerOptions)
-			)
-			if regexp.MustCompile(`^\d`).MatchString(dnsServerOptions.Server) {
-				if dnsServerOptions.Detour != constant.TypeDirect {
-					dnsServerOptions.Detour = udpOutbound.Tag
+			dnsServer := &singboxConfig.DNS.Servers[i]
+			if regexp.MustCompile(`^\d`).MatchString(dnsServer.Address) {
+				if dnsServer.Detour != constant.TypeDirect {
+					dnsServer.Detour = udpOutbound.Tag
 				}
-
-				dnsServer.Options = dnsServerOptions
 			}
 		}
 

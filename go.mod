@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/metacubex/mihomo v1.19.1
 	github.com/sagernet/sing v0.6.0-beta.12.0.20250130112616-23af22fe01ff
-	github.com/sagernet/sing-box v1.12.0-alpha.3
+	github.com/sagernet/sing-box v1.11.1
 	golang.org/x/text v0.22.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -63,6 +63,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/oasisprotocol/deoxysii v0.0.0-20220228165953-2091330c22b7 // indirect
+	github.com/oschwald/maxminddb-golang v1.12.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
@@ -74,6 +75,7 @@ require (
 	github.com/sagernet/nftables v0.3.0-beta.4 // indirect
 	github.com/sagernet/quic-go v0.49.0-beta.1 // indirect
 	github.com/sagernet/reality v0.0.0-20230406110435-ee17307e7691 // indirect
+	github.com/sagernet/sing-dns v0.4.0-beta.2 // indirect
 	github.com/sagernet/sing-mux v0.3.0-alpha.1 // indirect
 	github.com/sagernet/sing-quic v0.4.0-beta.4 // indirect
 	github.com/sagernet/sing-tun v0.6.0-beta.8 // indirect

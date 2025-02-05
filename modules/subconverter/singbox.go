@@ -9,7 +9,6 @@ import (
 	"github.com/FoolVPN-ID/tool/common"
 	box "github.com/sagernet/sing-box"
 	"github.com/sagernet/sing-box/option"
-	"github.com/sagernet/sing/common/json"
 )
 
 func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (option.Options, error) {
@@ -27,8 +26,12 @@ func (subconv *subconverterStruct) toSingboxByBaseConfig(configURL string) (opti
 		io.Copy(buf, res.Body)
 	}
 
-	baseConfig := buf.String()
-	baseOptions, err := json.UnmarshalExtended[option.Options]([]byte(baseConfig))
+	var (
+		baseConfig  = buf.String()
+		baseOptions option.Options
+	)
+
+	err = baseOptions.UnmarshalJSONContext(context.Background(), []byte(baseConfig))
 	if err != nil {
 		return option.Options{}, err
 	}
