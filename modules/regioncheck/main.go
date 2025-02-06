@@ -12,6 +12,7 @@ import (
 	"github.com/FoolVPN-ID/tool/common"
 	"github.com/FoolVPN-ID/tool/modules/config"
 	box "github.com/sagernet/sing-box"
+	"github.com/sagernet/sing-box/include"
 	"github.com/sagernet/sing-box/option"
 )
 
@@ -19,7 +20,7 @@ func MakeLibrary() LibraryStruct {
 	return LibraryStruct{
 		Runner: []func(http.Client) runnerResultStruct{
 			YoutubeCDN,
-			Netflix,
+			// Netflix,
 		},
 	}
 }
@@ -30,8 +31,10 @@ func (lib *LibraryStruct) Run(rawConfig string) error {
 		return err
 	}
 
+	ctx := context.Background()
+	ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
 	boxInstance, err := box.New(box.Options{
-		Context: context.Background(),
+		Context: ctx,
 		Options: boxConfig,
 	})
 

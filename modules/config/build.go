@@ -26,14 +26,26 @@ func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 			Disabled: true,
 		},
 		DNS: &option.DNSOptions{
-			Servers: []option.DNSServerOptions{
-				{
-					Tag:     "default-dns",
-					Address: "1.1.1.1",
-					Detour:  "direct",
+			RawDNSOptions: option.RawDNSOptions{
+				Servers: []option.NewDNSServerOptions{
+					{
+						Tag:  "default-dns",
+						Type: "udp",
+						Options: option.RemoteDNSServerOptions{
+							ServerOptions: option.ServerOptions{
+								Server:     "1.1.1.1",
+								ServerPort: 53,
+							},
+							LocalDNSServerOptions: option.LocalDNSServerOptions{
+								DialerOptions: option.DialerOptions{
+									Detour: "direct",
+								},
+							},
+						},
+					},
 				},
+				Final: "default-dns",
 			},
-			Final: "default-dns",
 		},
 		Inbounds: []option.Inbound{
 			{

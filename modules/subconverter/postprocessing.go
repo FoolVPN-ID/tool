@@ -2,7 +2,6 @@ package subconverter
 
 import (
 	"fmt"
-	"regexp"
 	"slices"
 
 	"github.com/sagernet/sing-box/constant"
@@ -28,11 +27,12 @@ func (subconv *subconverterStruct) PostTemplateSingBox(template string, singboxC
 
 		// Configure dns
 		for i := range singboxConfig.DNS.Servers {
-			dnsServer := &singboxConfig.DNS.Servers[i]
-			if regexp.MustCompile(`^\d`).MatchString(dnsServer.Address) {
-				if dnsServer.Detour != constant.TypeDirect {
-					dnsServer.Detour = udpOutbound.Tag
-				}
+			var dnsServer = &singboxConfig.DNS.Servers[i]
+
+			if dnsServer.Type == "udp" {
+				dnsServerOptions := dnsServer.Options.(*option.RemoteDNSServerOptions)
+				dnsServerOptions.Detour = udpOutbound.Tag
+				dnsServer.Options = dnsServerOptions
 			}
 		}
 

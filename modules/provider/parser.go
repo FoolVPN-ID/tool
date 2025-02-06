@@ -4,6 +4,8 @@ import (
 	"context"
 	"strings"
 
+	box "github.com/sagernet/sing-box"
+	"github.com/sagernet/sing-box/include"
 	"github.com/sagernet/sing-box/option"
 	E "github.com/sagernet/sing/common/exceptions"
 )
@@ -12,8 +14,12 @@ func Parse(content string) ([]option.Outbound, error) {
 	var outbounds []option.Outbound
 	var err error
 	if strings.Contains(content, "\"outbounds\"") {
-		var options option.Options
-		err = options.UnmarshalJSONContext(context.Background(), []byte(content))
+		var (
+			options option.Options
+			ctx     = context.Background()
+		)
+		ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+		err = options.UnmarshalJSONContext(ctx, []byte(content))
 		if err != nil {
 			return nil, E.Cause(err, "decode config at ")
 		}

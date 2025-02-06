@@ -13,6 +13,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing/common/json"
 )
 
 func buildServer() *http.Server {
@@ -110,7 +111,13 @@ func buildServer() *http.Server {
 				result = subconv.PostTemplateSingBox(apiForm.Template, result)
 			}
 
-			ctx.JSON(200, result)
+			var (
+				bufResult, _ = json.Marshal(result)
+				mapResult    any
+			)
+
+			json.Unmarshal(bufResult, &mapResult)
+			ctx.JSON(200, mapResult)
 		}
 	})
 

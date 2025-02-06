@@ -1,13 +1,20 @@
 package subconverter
 
 import (
+	"context"
 	"errors"
 	"log"
 	"strings"
 
 	"github.com/FoolVPN-ID/tool/modules/provider"
 	"github.com/metacubex/mihomo/common/convert"
+	box "github.com/sagernet/sing-box"
+	"github.com/sagernet/sing-box/include"
 	"github.com/sagernet/sing-box/option"
+)
+
+var (
+	globalCtx context.Context
 )
 
 type subconverterStruct struct {
@@ -22,7 +29,14 @@ type subconverterStruct struct {
 	}
 }
 
+func preRun() {
+	globalCtx = context.Background()
+	globalCtx = box.Context(globalCtx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+}
+
 func MakeSubconverterFromConfig(config string) (subconverterStruct, error) {
+	preRun()
+
 	subconv := subconverterStruct{}
 	subconv.rawConfigs = strings.ReplaceAll(config, ",", "\n")
 	subconv.Outbounds = subconv.parse(subconv.rawConfigs)
