@@ -46,7 +46,7 @@ func (lib *LibraryStruct) Run(rawConfig string) error {
 	boxInstance.Start()
 
 	// Build http client
-	listenPort := boxConfig.Inbounds[0].Options.(option.HTTPMixedInboundOptions).ListenPort
+	listenPort := boxConfig.Inbounds[0].Options.(*option.HTTPMixedInboundOptions).ListenPort
 	proxyClient, _ := url.Parse(fmt.Sprintf("socks5://0.0.0.0:%d", listenPort))
 	httpClient := &http.Client{
 		Timeout: 10 * time.Second,
