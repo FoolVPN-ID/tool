@@ -29,6 +29,7 @@ func buildServer() *http.Server {
 	})
 	r.GET("/api/v1/regioncheck", HandleGetRegionCheck)
 	r.POST("/api/v1/convert", HandlePostConvert)
+	r.POST("/api/v1/udprelay", HandlePostUdpRelay)
 
 	return &http.Server{
 		Addr:    ":8080",

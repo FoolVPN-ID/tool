@@ -9,13 +9,14 @@ import (
 	"github.com/sagernet/sing/common/json"
 )
 
+type ConvertAPIFormStruct struct {
+	URL      string `json:"url"`
+	Format   string `json:"format"`
+	Template string `json:"template"` // Only cf for now
+}
+
 func HandlePostConvert(ctx *gin.Context) {
-	type convertAPIFormStruct struct {
-		URL      string `json:"url"`
-		Format   string `json:"format"`
-		Template string `json:"template"` // Only cf for now
-	}
-	apiForm := convertAPIFormStruct{
+	apiForm := ConvertAPIFormStruct{
 		Format: "raw",
 	}
 	if err := ctx.ShouldBindBodyWithJSON(&apiForm); err != nil {
