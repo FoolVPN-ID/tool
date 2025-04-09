@@ -48,7 +48,7 @@ func HandlePostUdpRelay(ctx *gin.Context) {
 		return
 	}
 
-	conn.SetReadDeadline(time.Now().Add(3 * time.Second))
+	conn.SetReadDeadline(time.Now().Add(10 * time.Second))
 	buffer := make([]byte, 2048)
 	n, err := conn.Read(buffer)
 	if err != nil {
