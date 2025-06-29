@@ -31,7 +31,7 @@ type subconverterStruct struct {
 
 func preRun() {
 	globalCtx = context.Background()
-	globalCtx = box.Context(globalCtx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+	globalCtx = box.Context(globalCtx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry(), include.ServiceRegistry())
 }
 
 func MakeSubconverterFromConfig(config string) (subconverterStruct, error) {

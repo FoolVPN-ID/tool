@@ -856,7 +856,7 @@ func newHysteriaClashParser(proxy map[string]any) (option.Outbound, error) {
 	if upRaw, exists := proxy["up"]; exists {
 		switch up := upRaw.(type) {
 		case string:
-			options.Up = up
+			// options.Up = up
 		case int:
 			options.UpMbps = up
 		}
@@ -864,7 +864,7 @@ func newHysteriaClashParser(proxy map[string]any) (option.Outbound, error) {
 	if downRaw, exists := proxy["down"]; exists {
 		switch down := downRaw.(type) {
 		case string:
-			options.Down = down
+			// options.Down = down
 		case int:
 			options.DownMbps = down
 		}

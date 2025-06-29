@@ -18,7 +18,7 @@ func Parse(content string) ([]option.Outbound, error) {
 			options option.Options
 			ctx     = context.Background()
 		)
-		ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+		ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry(), include.ServiceRegistry())
 		err = options.UnmarshalJSONContext(ctx, []byte(content))
 		if err != nil {
 			return nil, E.Cause(err, "decode config at ")

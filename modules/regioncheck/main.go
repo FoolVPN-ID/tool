@@ -32,7 +32,7 @@ func (lib *LibraryStruct) Run(rawConfig string) error {
 	}
 
 	ctx := context.Background()
-	ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+	ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry(), include.ServiceRegistry())
 	boxInstance, err := box.New(box.Options{
 		Context: ctx,
 		Options: boxConfig,

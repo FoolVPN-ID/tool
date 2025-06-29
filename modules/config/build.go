@@ -18,7 +18,7 @@ import (
 
 func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 	ctx := context.Background()
-	ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry())
+	ctx = box.Context(ctx, include.InboundRegistry(), include.OutboundRegistry(), include.EndpointRegistry(), include.DNSTransportRegistry(), include.ServiceRegistry())
 
 	outbounds, err := provider.Parse(rawConfig)
 	if err != nil {
