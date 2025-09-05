@@ -17,12 +17,15 @@ func main() {
 	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP)
 	defer signal.Stop(osSignals)
 
+	fmt.Println("Starting services...")
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
 
 		// Services
 		go api.RunWithContext(ctx)
 		go telegram.RunWithContext(ctx)
+
+		fmt.Println("Service started!")
 
 		// Notify services to gracefully shutdown
 		for {
