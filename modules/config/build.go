@@ -43,7 +43,6 @@ func BuildSingboxConfig(rawConfig string) (option.Options, error) {
 					"type":        "udp",
 					"server":      "1.1.1.1",
 					"server_port": 53,
-					"detour":      "direct",
 				},
 			},
 			"final": "default-dns",
